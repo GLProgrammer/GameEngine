@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Game_engine
 {
@@ -12,9 +13,10 @@ namespace Game_engine
         private Form targetForm;
         private Timer timer;
         private List<FormObject> scene;
-
+        private Graphics g;
         public Engine(Form form, int FPS)
         {
+            this.g = form.CreateGraphics();
             targetForm = form;
             scene = new List<FormObject>();
 
@@ -30,9 +32,13 @@ namespace Game_engine
             //       objektu, ktera by se updatovala po kazdym ticku timeru
 
             // TODO: Pridat delegata na timer, kde bysme obslouzili vsechny objekty
+            timer.Tick += new EventHandler(MyTimer_Tick);
         }
 
-
+        private void MyTimer_Tick(object sender, EventArgs e)
+        {
+            Draw();
+        }
 
 
 
@@ -47,11 +53,14 @@ namespace Game_engine
             int max = scene.Count;
             for (int i = 0; i < max; i++)
             {
-                #region Draw current object
                 FormObject obj = scene[i];
+                if (obj.active)
+                {
+                    g.DrawRectangle(Pens.Black, obj.x, obj.y, 50, 50);
+                }
 
-                
-                #endregion
+                obj.x += obj.dx;
+                obj.y += obj.dy;               
             }
         }
     }
