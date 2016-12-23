@@ -1,2 +1,2 @@
 # GameEngine
-Our awesome Game engine
+Our awesome game engine for Windows Forms
