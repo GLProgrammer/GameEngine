@@ -27,7 +27,8 @@ namespace Game_engine
                 case 0:
                     eng = new Engine(this, 10);
 
-                    mujHezkyTestovaciObjektik = new FormObject(10, 10);
+                    Image img = Image.FromFile(@"..\..\Texture\Stone.jpg");
+                    mujHezkyTestovaciObjektik = new FormObject(10, 10, img);
                     eng.Add(mujHezkyTestovaciObjektik);
                     eng.Start();
 

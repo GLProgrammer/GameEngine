@@ -59,7 +59,7 @@ namespace Game_engine
 
                     obj.x += obj.dx;
                     obj.y += obj.dy;
-                }             
+                }
             }
         }
     }
