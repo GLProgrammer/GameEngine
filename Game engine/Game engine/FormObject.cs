@@ -16,7 +16,7 @@ namespace Game_engine
         public Image texture;
 
         public FormObject(int x, int y)
-        {
+        {            
             this.x = x;
             this.y = y;
             dx = 0;
