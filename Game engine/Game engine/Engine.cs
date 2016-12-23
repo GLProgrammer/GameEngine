@@ -51,7 +51,12 @@ namespace Game_engine
                 if (obj.active)
                 {
                     g.Clear(targetForm.BackColor);
-                    g.DrawRectangle(Pens.Black, obj.x, obj.y, 50, 50);
+
+                    if (obj.texture == null)
+                        g.DrawRectangle(Pens.Black, obj.x, obj.y, 50, 50);
+                    else
+                        g.DrawImage(obj.texture, new Point(obj.x, obj.y));
+
                     obj.x += obj.dx;
                     obj.y += obj.dy;
                 }             
