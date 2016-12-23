@@ -26,12 +26,6 @@ namespace Game_engine
 
 
             this.timer = timer;
-            //form.Controls.Add(timer);
-
-            // TODO: Udelat metody Start(), Pause(), co startujou/pauzujou timer, udelat nejakou kolekci
-            //       objektu, ktera by se updatovala po kazdym ticku timeru
-
-            // TODO: Pridat delegata na timer, kde bysme obslouzili vsechny objekty
             timer.Tick += new EventHandler(MyTimer_Tick);
         }
 
@@ -57,10 +51,9 @@ namespace Game_engine
                 if (obj.active)
                 {
                     g.DrawRectangle(Pens.Black, obj.x, obj.y, 50, 50);
-                }
-
-                obj.x += obj.dx;
-                obj.y += obj.dy;               
+                    obj.x += obj.dx;
+                    obj.y += obj.dy;
+                }             
             }
         }
     }

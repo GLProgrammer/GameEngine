@@ -9,3 +9,4 @@ C:\Users\petrs\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Gam
 C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\bin\Debug\Game engine.exe.config
 C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.exe
 C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.pdb
+C:\Users\petrs\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game_engine.Form1.resources

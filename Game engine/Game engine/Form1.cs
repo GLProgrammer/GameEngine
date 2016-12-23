@@ -16,5 +16,37 @@ namespace Game_engine
         {
             InitializeComponent();
         }
+
+        int state = 0;
+        Engine eng;
+        FormObject mujHezkyTestovaciObjektik;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            switch (state)
+            {
+                case 0:
+                    eng = new Engine(this, 10);
+
+                    mujHezkyTestovaciObjektik = new FormObject(10, 10);
+                    eng.Add(mujHezkyTestovaciObjektik);
+                    eng.Start();
+
+                    state++;
+                    break;
+
+                case 1:
+                    mujHezkyTestovaciObjektik.dx = 1;
+                    state++;
+                    break;
+                case 2:
+                    mujHezkyTestovaciObjektik.dx = -1;
+                    state++;
+                    break;
+                case 3:
+                    eng.Stop();
+                    state = 0;
+                    break;
+            }
+        }
     }
 }
