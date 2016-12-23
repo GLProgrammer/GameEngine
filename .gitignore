@@ -257,3 +257,4 @@ paket-files/
 *.suo
 *.suo
 Game engine/Game engine/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+*.Cache
