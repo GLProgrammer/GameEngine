@@ -10,3 +10,9 @@ C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\bin\Debug\Gam
 C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.exe
 C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.pdb
 C:\Users\petrs\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game_engine.Form1.resources
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.csprojResolveAssemblyReference.cache
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game_engine.Form1.resources
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game_engine.Properties.Resources.resources
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\obj\Debug\Game engine.csproj.GenerateResource.Cache
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\bin\Debug\Game engine.exe
+C:\Users\Jirka\Documents\GitHub\GameEngine\Game engine\Game engine\bin\Debug\Game engine.pdb

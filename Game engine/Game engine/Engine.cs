@@ -50,6 +50,7 @@ namespace Game_engine
                 FormObject obj = scene[i];
                 if (obj.active)
                 {
+                    g.Clear(targetForm.BackColor);
                     g.DrawRectangle(Pens.Black, obj.x, obj.y, 50, 50);
                     obj.x += obj.dx;
                     obj.y += obj.dy;
