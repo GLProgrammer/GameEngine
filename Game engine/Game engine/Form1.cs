@@ -15,18 +15,20 @@ namespace Game_engine
         public Form1()
         {
             InitializeComponent();
+            eng = new Engine(this, 30, 2);
+            img = Image.FromFile(@"..\..\Texture\Stone.jpg");
+            rnd = new Random();
         }
 
+        Random rnd;
         Engine eng;
         FormObject mujHezkyTestovaciObjektik;
+        Image img;
         private void button1_Click(object sender, EventArgs e)
         {
-            eng = new Engine(this, 30, 1);
-
-            Image img = Image.FromFile(@"..\..\Texture\Stone.jpg");
-            mujHezkyTestovaciObjektik = new FormObject(10, 10, 20, 50, true, false, img);
-            mujHezkyTestovaciObjektik.dx = 3;
-            mujHezkyTestovaciObjektik.dy = 5;
+            mujHezkyTestovaciObjektik = new FormObject(rnd.Next(10, 101), rnd.Next(10, 101), 20, 20, true, false);
+            mujHezkyTestovaciObjektik.dx = rnd.Next(-10, 11);
+            mujHezkyTestovaciObjektik.dy = rnd.Next(-10, 11);
             eng.Add(mujHezkyTestovaciObjektik);
             eng.Start();
         }

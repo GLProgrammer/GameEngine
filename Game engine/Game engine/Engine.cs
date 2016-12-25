@@ -52,6 +52,8 @@ namespace Game_engine
         public void Add(FormObject[] obj) { scene.AddRange(obj); }
         private void Draw()
         {
+            g.Clear(targetForm.BackColor);
+
             // Nepouzivat foreach, jinak by se cyklus po pridani prvku castecne opakoval
             int max = scene.Count;
             for (int i = 0; i < max; i++)
@@ -59,7 +61,6 @@ namespace Game_engine
                 FormObject obj = scene[i];
                 if (obj.active)
                 {
-                    g.Clear(targetForm.BackColor);
 
                     if (obj.texture == null)
                         g.DrawRectangle(Pens.Black, obj.x, obj.y, obj.width, obj.length);
@@ -70,22 +71,35 @@ namespace Game_engine
                     obj.y += obj.dy;
 
                     if (obj.gravity)
-                        obj.y += (targetForm.Width / 100) * 0;
+                        obj.dy += 0.5f;
 
                     #region Collision
 
                     if (!obj.ghost && collision > 0)
                     {
                         // Collision with borders of form
-                        if (obj.x <= 0 || obj.x + obj.width * 1.6 >= targetForm.Size.Width)
-                            obj.dx = -obj.dx;
-                        if (obj.y <= 0 || obj.y + obj.length * 1.6 >= targetForm.Size.Height)
-                            obj.dy = -obj.dy;
+                        if (obj.x <= 0 || obj.x + obj.width >= targetForm.Size.Width)
+                            obj.dx = -(obj.dx / 100 * 90);
+
+                        if (obj.y <= 0 || obj.y + obj.length >= targetForm.Size.Height)
+                            obj.dy = -(obj.dy / 100 * 90);
 
 
                         if (collision == 2)
                         {
-                            // TODO: kolize s objekty
+                            var cols = (from x in scene where obj.x >= x.x && obj.x <= x.x + x.width && obj.y >= x.y && obj.y <= x.y + x.length select x).ToArray();
+
+                            for(int j = 0; j < cols.Count(); j++)
+                            {
+                                if (cols[j] == obj)
+                                    continue;
+
+                                obj.dx = -(obj.dx / 100 * 90);
+                                obj.dy = -(obj.dy / 100 * 90);
+
+                                cols[j].dx = -(cols[j].dx / 100 * 90);
+                                cols[j].dy = -(cols[j].dy / 100 * 90);
+                            }
                         }
                     }
 
