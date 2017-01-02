@@ -26,11 +26,33 @@ namespace Game_engine
         Image img;
         private void button1_Click(object sender, EventArgs e)
         {
-            mujHezkyTestovaciObjektik = new FormObject(rnd.Next(10, 101), rnd.Next(10, 101), 20, 20, true, false);
+            mujHezkyTestovaciObjektik = new FormObject(rnd.Next(0, ClientSize.Width), rnd.Next(10, 101), 20, 20, true, false);
             mujHezkyTestovaciObjektik.dx = rnd.Next(-3, 4);
             mujHezkyTestovaciObjektik.dy = rnd.Next(-3, 4);
             eng.Add(mujHezkyTestovaciObjektik);
             eng.Start();
+            button3.Text = "| |";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            eng.RemoveAll();
+            eng.Stop();
+            button3.Text = "▶";
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (button3.Text == "| |")
+            {
+                button3.Text = "▶";
+                eng.Stop();
+            }
+            else
+            {
+                button3.Text = "| |";
+                eng.Start();
+            }
         }
     }
 }

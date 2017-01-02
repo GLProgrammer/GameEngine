@@ -50,6 +50,9 @@ namespace Game_engine
         public void Stop() { timer.Stop(); }
         public void Add(FormObject obj) { scene.Add(obj); }
         public void Add(FormObject[] obj) { scene.AddRange(obj); }
+        public void Remove(FormObject obj) { scene.Remove(obj); }
+        public void Remove(FormObject[] obj) { foreach (FormObject o in obj) Remove(o); }
+        public void RemoveAll() { scene.Clear(); g.Clear(targetForm.BackColor); }
         private void Draw()
         {
             g.Clear(targetForm.BackColor);
@@ -80,24 +83,24 @@ namespace Game_engine
                         // Collision with borders of form
                         if (obj.x < 0 || obj.x + obj.width > targetForm.ClientSize.Width)
                         {
-                            obj.dx = -(obj.dx/* / 100 * 90*/);
+                            obj.dx = -(obj.dx / 100 * 90);
 
                             if (obj.x < 0)
                                 obj.x = 0;
 
                             if (obj.x + obj.width > targetForm.ClientSize.Width)
-                                obj.x = targetForm.ClientSize.Width;
+                                obj.x = targetForm.ClientSize.Width - obj.width;
                         }
 
                         if (obj.y < 0 || obj.y + obj.length > targetForm.Size.Height)
                         {
-                            obj.dy = -(obj.dy/* / 100 * 90*/);
+                            obj.dy = -(obj.dy / 100 * 90);
 
                             if (obj.y < 0)
                                 obj.y = 0;
 
                             if (obj.y + obj.length > targetForm.ClientSize.Height)
-                                obj.y = targetForm.ClientSize.Height;
+                                obj.y = targetForm.ClientSize.Height - obj.length;
                         }
 
                         if (collision == 2)
@@ -109,11 +112,17 @@ namespace Game_engine
                                 if (cols[j] == obj)
                                     continue;
 
-                                obj.dx = -(obj.dx/* / 100 * 90*/);
-                                obj.dy = -(obj.dy/* / 100 * 90*/);
+                                obj.dx = -(obj.dx / 100 * 90);
+                                obj.dy = -(obj.dy / 100 * 90);
 
-                                cols[j].dx = -(cols[j].dx/* / 100 * 90*/);
-                                cols[j].dy = -(cols[j].dy/* / 100 * 90*/);
+                                cols[j].dx = -(cols[j].dx / 100 * 90);
+                                cols[j].dy = -(cols[j].dy / 100 * 90);
+
+                                obj.x += obj.dx;
+                                obj.y += obj.dy;
+
+                                cols[j].x += cols[j].dx;
+                                cols[j].y += cols[j].dy;
                             }
                         }
                     }
