@@ -78,15 +78,15 @@ namespace Game_engine
                     if (!obj.ghost && collision > 0)
                     {
                         // Collision with borders of form
-                        if (obj.x < 0 || obj.x + obj.width > targetForm.Size.Width)
+                        if (obj.x < 0 || obj.x + obj.width > targetForm.ClientSize.Width)
                         {
                             obj.dx = -(obj.dx/* / 100 * 90*/);
 
                             if (obj.x < 0)
                                 obj.x = 0;
 
-                            if (obj.x + obj.width > targetForm.Size.Width)
-                                obj.x = targetForm.Size.Width;
+                            if (obj.x + obj.width > targetForm.ClientSize.Width)
+                                obj.x = targetForm.ClientSize.Width;
                         }
 
                         if (obj.y < 0 || obj.y + obj.length > targetForm.Size.Height)
@@ -96,8 +96,8 @@ namespace Game_engine
                             if (obj.y < 0)
                                 obj.y = 0;
 
-                            if (obj.y + obj.length > targetForm.Size.Height)
-                                obj.y = targetForm.Size.Height;
+                            if (obj.y + obj.length > targetForm.ClientSize.Height)
+                                obj.y = targetForm.ClientSize.Height;
                         }
 
                         if (collision == 2)
