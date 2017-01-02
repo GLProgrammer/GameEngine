@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game engine", "Game engine\Game engine.csproj", "{89E4E0FA-7844-4115-92C6-0B0A56C9503D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{600ADC55-EB7C-44CF-AB22-97544C9973BC}"
+	ProjectSection(SolutionItems) = preProject
+		Game engine\Vector2.cs = Game engine\Vector2.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

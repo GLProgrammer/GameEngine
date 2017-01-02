@@ -27,8 +27,8 @@ namespace Game_engine
         private void button1_Click(object sender, EventArgs e)
         {
             mujHezkyTestovaciObjektik = new FormObject(rnd.Next(10, 101), rnd.Next(10, 101), 20, 20, true, false);
-            mujHezkyTestovaciObjektik.dx = rnd.Next(-10, 11);
-            mujHezkyTestovaciObjektik.dy = rnd.Next(-10, 11);
+            mujHezkyTestovaciObjektik.dx = rnd.Next(-3, 4);
+            mujHezkyTestovaciObjektik.dy = rnd.Next(-3, 4);
             eng.Add(mujHezkyTestovaciObjektik);
             eng.Start();
         }

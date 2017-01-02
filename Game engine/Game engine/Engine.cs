@@ -78,12 +78,27 @@ namespace Game_engine
                     if (!obj.ghost && collision > 0)
                     {
                         // Collision with borders of form
-                        if (obj.x <= 0 || obj.x + obj.width >= targetForm.Size.Width)
-                            obj.dx = -(obj.dx / 100 * 90);
+                        if (obj.x < 0 || obj.x + obj.width > targetForm.Size.Width)
+                        {
+                            obj.dx = -(obj.dx/* / 100 * 90*/);
 
-                        if (obj.y <= 0 || obj.y + obj.length >= targetForm.Size.Height)
-                            obj.dy = -(obj.dy / 100 * 90);
+                            if (obj.x < 0)
+                                obj.x = 0;
 
+                            if (obj.x + obj.width > targetForm.Size.Width)
+                                obj.x = targetForm.Size.Width;
+                        }
+
+                        if (obj.y < 0 || obj.y + obj.length > targetForm.Size.Height)
+                        {
+                            obj.dy = -(obj.dy/* / 100 * 90*/);
+
+                            if (obj.y < 0)
+                                obj.y = 0;
+
+                            if (obj.y + obj.length > targetForm.Size.Height)
+                                obj.y = targetForm.Size.Height;
+                        }
 
                         if (collision == 2)
                         {
@@ -94,11 +109,11 @@ namespace Game_engine
                                 if (cols[j] == obj)
                                     continue;
 
-                                obj.dx = -(obj.dx / 100 * 90);
-                                obj.dy = -(obj.dy / 100 * 90);
+                                obj.dx = -(obj.dx/* / 100 * 90*/);
+                                obj.dy = -(obj.dy/* / 100 * 90*/);
 
-                                cols[j].dx = -(cols[j].dx / 100 * 90);
-                                cols[j].dy = -(cols[j].dy / 100 * 90);
+                                cols[j].dx = -(cols[j].dx/* / 100 * 90*/);
+                                cols[j].dy = -(cols[j].dy/* / 100 * 90*/);
                             }
                         }
                     }
