@@ -14,6 +14,7 @@ namespace Game_engine
         public float x, y, dx, dy, length, width;
         public bool active, gravity, ghost;
         public Image texture;
+        public int highlight;
 
 
         /// <param name="ghost">If ghost, it is not affected by any collision</param>
@@ -29,6 +30,7 @@ namespace Game_engine
             this.gravity = gravity;
             this.ghost = ghost;
             texture = null;
+            highlight = 0;
         }
 
 
@@ -46,6 +48,7 @@ namespace Game_engine
             this.gravity = gravity;
             this.ghost = ghost;
             this.texture = texture;
+            highlight = 0;
         }
     }
 }

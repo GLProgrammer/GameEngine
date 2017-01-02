@@ -15,7 +15,7 @@ namespace Game_engine
         public Form1()
         {
             InitializeComponent();
-            eng = new Engine(this, 30, 2);
+            eng = new Engine(this, 30, 2, true);
             img = Image.FromFile(@"..\..\Texture\Stone.jpg");
             rnd = new Random();
         }
@@ -53,6 +53,11 @@ namespace Game_engine
                 button3.Text = "| |";
                 eng.Start();
             }
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            eng.MouseClick(e);
         }
     }
 }

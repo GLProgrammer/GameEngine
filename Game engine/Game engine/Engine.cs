@@ -15,6 +15,7 @@ namespace Game_engine
         private List<FormObject> scene;
         private Graphics g;
         private int collision;
+        private bool highlightOnClick;
 
         /// <summary>
         /// 
@@ -22,7 +23,8 @@ namespace Game_engine
         /// <param name="form"></param>
         /// <param name="FPS"></param>
         /// <param name="collision">0 = No collision    1 = Collision only with borders of form     2 = Collision with borders of form & all objects</param>
-        public Engine(Form form, int FPS, int collision)
+        /// <param name="highlightOnClick">Should I highlight objects when you click them?</param>
+        public Engine(Form form, int FPS, int collision, bool highlightOnClick)
         {
             this.g = form.CreateGraphics();
             targetForm = form;
@@ -36,6 +38,8 @@ namespace Game_engine
 
             this.timer = timer;
             timer.Tick += new EventHandler(MyTimer_Tick);
+
+            this.highlightOnClick = highlightOnClick;
         }
 
         private void MyTimer_Tick(object sender, EventArgs e)
@@ -65,10 +69,21 @@ namespace Game_engine
                 if (obj.active)
                 {
 
-                    if (obj.texture == null)
-                        g.DrawRectangle(Pens.Black, obj.x, obj.y, obj.width, obj.length);
+
+
+                    if (highlightOnClick && obj.highlight > 100)
+                    {
+                        Brush b = new SolidBrush(Color.FromArgb(obj.highlight, 0, 0, 255));
+                        obj.highlight -= 5;
+                        g.FillRectangle(b, obj.x, obj.y, obj.width, obj.length);
+                    }
                     else
-                        g.DrawImage(obj.texture, obj.x, obj.y, obj.width, obj.length);
+                    {
+                        if (obj.texture == null)
+                            g.DrawRectangle(Pens.Black, obj.x, obj.y, obj.width, obj.length);
+                        else
+                            g.DrawImage(obj.texture, obj.x, obj.y, obj.width, obj.length);
+                    }
 
                     obj.x += obj.dx;
                     obj.y += obj.dy;
@@ -105,9 +120,10 @@ namespace Game_engine
 
                         if (collision == 2)
                         {
+                            // Vyber vsechny objekty ze sceny, ktere se protinaji
                             var cols = (from x in scene where obj.x >= x.x && obj.x <= x.x + x.width && obj.y >= x.y && obj.y <= x.y + x.length select x).ToArray();
 
-                            for(int j = 0; j < cols.Count(); j++)
+                            for (int j = 0; j < cols.Count(); j++)
                             {
                                 if (cols[j] == obj)
                                     continue;
@@ -128,6 +144,18 @@ namespace Game_engine
                     }
 
                     #endregion
+                }
+            }
+        }
+        public void MouseClick(MouseEventArgs e)
+        {
+            if (highlightOnClick)
+            {
+                var cols = (from x in scene where (e.X >= x.x && e.X <= x.x + x.width) && (e.Y >= x.y && e.Y <= x.y + x.length) select x).ToArray();
+
+                for (int i = 0; i < cols.Count(); i++)
+                {
+                    cols[i].highlight = 255;
                 }
             }
         }
