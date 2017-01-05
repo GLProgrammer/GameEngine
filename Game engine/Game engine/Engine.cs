@@ -49,15 +49,20 @@ namespace Game_engine
 
 
 
-
+        ~Engine()
+        {
+            timer = null;
+            scene.Clear();
+            g.Dispose();
+        }
         public void Start() { timer.Start(); }
         public void Stop() { timer.Stop(); }
-        public void Add(FormObject obj) { scene.Add(obj); }
-        public void Add(FormObject[] obj) { scene.AddRange(obj); }
+        public void Add(FormObject obj) { scene.Add(obj); Draw(obj); }
+        public void Add(FormObject[] obj) { scene.AddRange(obj); Draw(); }
         public void Remove(FormObject obj) { scene.Remove(obj); }
         public void Remove(FormObject[] obj) { foreach (FormObject o in obj) Remove(o); }
         public void RemoveAll() { scene.Clear(); g.Clear(targetForm.BackColor); }
-        private void Draw()
+        public void Draw()
         {
             g.Clear(targetForm.BackColor);
 
@@ -65,99 +70,118 @@ namespace Game_engine
             int max = scene.Count;
             for (int i = 0; i < max; i++)
             {
-                FormObject obj = scene[i];
-                if (obj.active)
+                Draw(scene[i]);
+            }
+        }
+        private void Draw(FormObject obj)
+        {
+            if (obj.active)
+            {
+                if (highlightOnClick && obj.highlight > 100)
                 {
-
-
-
-                    if (highlightOnClick && obj.highlight > 100)
+                    Brush b = new SolidBrush(Color.FromArgb(obj.highlight, 0, 0, 255));
+                    obj.highlight -= 5;
+                    g.FillRectangle(b, obj.x, obj.y, obj.width, obj.length);
+                }
+                else
+                {
+                    if (obj.texture == null)
                     {
-                        Brush b = new SolidBrush(Color.FromArgb(obj.highlight, 0, 0, 255));
-                        obj.highlight -= 5;
-                        g.FillRectangle(b, obj.x, obj.y, obj.width, obj.length);
-                    }
-                    else
-                    {
-                        if (obj.texture == null)
+                        if (obj.brush == null)
                             g.DrawRectangle(Pens.Black, obj.x, obj.y, obj.width, obj.length);
                         else
-                            g.DrawImage(obj.texture, obj.x, obj.y, obj.width, obj.length);
+                            g.FillRectangle(obj.brush, obj.x, obj.y, obj.width, obj.length);
+                    }
+                    else
+                        g.DrawImage(obj.texture, obj.x, obj.y, obj.width, obj.length);
+
+
+                    if (obj.textToDraw != "")
+                    {
+                        StringFormat drawFormat = new StringFormat();
+                        Font drawFont = new Font("Arial", obj.width / 2);
+                        SolidBrush drawBrush = new SolidBrush(Color.Black);
+
+                        g.DrawString(obj.textToDraw, drawFont, drawBrush, obj.x, obj.y, drawFormat);
+                        drawFont.Dispose();
+                        drawBrush.Dispose();
                     }
 
-                    obj.x += obj.dx;
-                    obj.y += obj.dy;
+                }
 
-                    if (obj.gravity)
-                        obj.dy += 0.5f;
+                obj.x += obj.dx;
+                obj.y += obj.dy;
 
-                    #region Collision
+                if (obj.gravity)
+                    obj.dy += 0.5f;
 
-                    if (!obj.ghost && collision > 0)
+                #region Collision
+
+                if (!obj.ghost && collision > 0)
+                {
+                    // Collision with borders of form
+                    if (obj.x < 0 || obj.x + obj.width > targetForm.ClientSize.Width)
                     {
-                        // Collision with borders of form
-                        if (obj.x < 0 || obj.x + obj.width > targetForm.ClientSize.Width)
+                        obj.dx = -(obj.dx / 100 * 90);
+
+                        if (obj.x < 0)
+                            obj.x = 0;
+
+                        if (obj.x + obj.width > targetForm.ClientSize.Width)
+                            obj.x = targetForm.ClientSize.Width - obj.width;
+                    }
+
+                    if (obj.y < 0 || obj.y + obj.length > targetForm.Size.Height)
+                    {
+                        obj.dy = -(obj.dy / 100 * 90);
+
+                        if (obj.y < 0)
+                            obj.y = 0;
+
+                        if (obj.y + obj.length > targetForm.ClientSize.Height)
+                            obj.y = targetForm.ClientSize.Height - obj.length;
+                    }
+
+                    if (collision == 2)
+                    {
+                        // Vyber vsechny objekty ze sceny, ktere se protinaji
+                        var cols = (from x in scene where obj.x >= x.x && obj.x <= x.x + x.width && obj.y >= x.y && obj.y <= x.y + x.length select x).ToArray();
+
+                        for (int j = 0; j < cols.Count(); j++)
                         {
+                            if (cols[j] == obj)
+                                continue;
+
                             obj.dx = -(obj.dx / 100 * 90);
-
-                            if (obj.x < 0)
-                                obj.x = 0;
-
-                            if (obj.x + obj.width > targetForm.ClientSize.Width)
-                                obj.x = targetForm.ClientSize.Width - obj.width;
-                        }
-
-                        if (obj.y < 0 || obj.y + obj.length > targetForm.Size.Height)
-                        {
                             obj.dy = -(obj.dy / 100 * 90);
 
-                            if (obj.y < 0)
-                                obj.y = 0;
+                            cols[j].dx = -(cols[j].dx / 100 * 90);
+                            cols[j].dy = -(cols[j].dy / 100 * 90);
 
-                            if (obj.y + obj.length > targetForm.ClientSize.Height)
-                                obj.y = targetForm.ClientSize.Height - obj.length;
-                        }
+                            obj.x += obj.dx;
+                            obj.y += obj.dy;
 
-                        if (collision == 2)
-                        {
-                            // Vyber vsechny objekty ze sceny, ktere se protinaji
-                            var cols = (from x in scene where obj.x >= x.x && obj.x <= x.x + x.width && obj.y >= x.y && obj.y <= x.y + x.length select x).ToArray();
-
-                            for (int j = 0; j < cols.Count(); j++)
-                            {
-                                if (cols[j] == obj)
-                                    continue;
-
-                                obj.dx = -(obj.dx / 100 * 90);
-                                obj.dy = -(obj.dy / 100 * 90);
-
-                                cols[j].dx = -(cols[j].dx / 100 * 90);
-                                cols[j].dy = -(cols[j].dy / 100 * 90);
-
-                                obj.x += obj.dx;
-                                obj.y += obj.dy;
-
-                                cols[j].x += cols[j].dx;
-                                cols[j].y += cols[j].dy;
-                            }
+                            cols[j].x += cols[j].dx;
+                            cols[j].y += cols[j].dy;
                         }
                     }
-
-                    #endregion
                 }
+
+                #endregion
             }
         }
         public void MouseClick(MouseEventArgs e)
         {
-            if (highlightOnClick)
-            {
-                var cols = (from x in scene where (e.X >= x.x && e.X <= x.x + x.width) && (e.Y >= x.y && e.Y <= x.y + x.length) select x).ToArray();
+            var cols = (from x in scene where (e.X >= x.x && e.X <= x.x + x.width) && (e.Y >= x.y && e.Y <= x.y + x.length) select x).ToArray();
 
-                for (int i = 0; i < cols.Count(); i++)
-                {
-                    cols[i].highlight = 255;
-                }
+            for (int i = 0; i < cols.Count(); i++)
+            {
+                cols[i].highlight = 255;
+
+                if (cols[i].onClick != null)
+                    cols[i].onClick.DynamicInvoke(e);
             }
+
         }
     }
 }

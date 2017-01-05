@@ -54,12 +54,21 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="FormObject.cs" />
+    <Compile Include="Minesweeper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Minesweeper.Designer.cs">
+      <DependentUpon>Minesweeper.cs</DependentUpon>
+    </Compile>
     <Compile Include="Mouse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector2.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Minesweeper.resx">
+      <DependentUpon>Minesweeper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
