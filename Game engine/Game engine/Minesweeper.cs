@@ -38,7 +38,9 @@ namespace Game_engine
         Image tile_empty = Image.FromFile("../../Texture/minesweeper_empty.png");
         Image tile_hidden = Image.FromFile("../../Texture/minesweeper_tile.png");
         Image tile_flag = Image.FromFile("../.../Texture/minesweeper_flag.png");
+        Image tile_flag_bad = Image.FromFile("../../Texture/minesweeper_flag_bad.png");
         Image tile_bomb = Image.FromFile("../../Texture/minesweeper_bomb.png");
+        Image tile_bomb_activated = Image.FromFile("../../Texture/minesweeper_bomb_activated.png");
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -107,6 +109,7 @@ namespace Game_engine
             eng = null;
         }
 
+        DateTime lastClick;
         private void Minesweeper_MouseClickAtRect(MouseEventArgs e)
         {
             int x = e.X - gameField_locX;
@@ -115,6 +118,109 @@ namespace Game_engine
             x = (int)(x / (gameField_sizeX / (float)sizeX.Value));
             y = (int)(y / (gameField_sizeY / (float)sizeX.Value));
 
+            // On doubleclick (the last click was before 350ms or earlier)
+            #region DoubleClick
+            if (DateTime.Now - lastClick < TimeSpan.FromMilliseconds(350))
+            {
+                if ((e.Button == MouseButtons.Left || e.Button == MouseButtons.Right) && playField[x, y] == 20)
+                {
+                    int mines = NumberOfNearMines(x, y);
+
+                    int detected = 0;
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        if (x + i < 0 || x + i >= playField.GetLength(0))
+                            continue;
+
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if (y + j < 0 || y + j >= playField.GetLength(1))
+                                continue;
+
+                            if (playField[x + i, y + j] == 10 || playField[x + i, y + j] == 11)
+                                detected++;
+                        }
+                    }
+
+                    // Reveal all mines in 3x3 square. If there is a bomb, BOOM it
+                    if (detected == mines)
+                    {
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            if (x + i < 0 || x + i >= playField.GetLength(0))
+                                continue;
+
+                            for (int j = -1; j <= 1; j++)
+                            {
+                                if (y + j < 0 || y + j >= playField.GetLength(1))
+                                    continue;
+
+                                if (playField[x + i, y + j] == 0)
+                                {
+                                    playField[x + i, y + j] = 20;
+
+                                    eng.Remove(drawField[x + i, y + j]);
+                                    drawField[x + i, y + j].texture = tile_empty;
+                                    if (NumberOfNearMines(x + i, y + j) > 0)
+                                        drawField[x + i, y + j].textToDraw = NumberOfNearMines(x + i, y + j).ToString();
+                                    else
+                                        RevealWhiteTiles(x + i, y + j);
+
+                                    eng.Add(drawField[x + i, y + j]);
+                                }
+                                // BOOM
+                                else if (playField[x + i, y + j] == 1)
+                                {
+                                    // Reveal all tiles
+                                    for (int a = 0; a < playField.GetLength(0); a++)
+                                    {
+                                        for (int b = 0; b < playField.GetLength(1); b++)
+                                        {
+                                            eng.Remove(drawField[a, b]);
+
+                                            if (playField[a, b] == 0 || playField[a, b] == 10)
+                                            {
+                                                if (playField[a, b] == 0)
+                                                    drawField[a, b].texture = tile_empty;
+                                                else
+                                                    drawField[a, b].texture = tile_flag_bad;
+                                                playField[a, b] = 20;
+                                            }
+                                            else if (playField[a, b] == 1)
+                                            {
+                                                playField[a, b] = 21;
+                                                drawField[a, b].texture = tile_bomb;
+                                            }
+
+                                            if (playField[a, b] != 21 && playField[a, b] != 11)
+                                            {
+                                                int nmbr = NumberOfNearMines(a, b);
+                                                if (nmbr > 0)
+                                                    drawField[a, b].textToDraw = nmbr.ToString();
+                                            }
+
+                                            if (a == x + i && b == y + j)
+                                                drawField[a, b].texture = tile_bomb_activated;
+
+                                            if (drawField[a, b].texture == tile_flag_bad)
+                                                drawField[a, b].textToDraw = "";
+
+                                            eng.Add(drawField[a, b]);
+                                        }
+                                    }
+
+                                    end = true;
+                                    lastClick = DateTime.Now;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            lastClick = DateTime.Now;
+            #endregion
+            #region Left button
             if (e.Button == MouseButtons.Left)
             {
                 // Reveal position; if marked -> remove mark
@@ -140,18 +246,33 @@ namespace Game_engine
                         for (int j = 0; j < playField.GetLength(1); j++)
                         {
                             eng.Remove(drawField[i, j]);
-                            drawField[i, j].textToDraw = "";
 
                             if (playField[i, j] == 0 || playField[i, j] == 10)
                             {
+                                if (playField[i, j] == 0)
+                                    drawField[i, j].texture = tile_empty;
+                                else
+                                    drawField[i, j].texture = tile_flag_bad;
                                 playField[i, j] = 20;
-                                drawField[i, j].texture = tile_empty;
                             }
                             else if (playField[i, j] == 1)
                             {
                                 playField[i, j] = 21;
                                 drawField[i, j].texture = tile_bomb;
                             }
+
+                            if (playField[i, j] != 21 && playField[i, j] != 11)
+                            {
+                                int nmbr = NumberOfNearMines(i, j);
+                                if (nmbr > 0)
+                                    drawField[i, j].textToDraw = nmbr.ToString();
+                            }
+
+                            if (i == x && j == y)
+                                drawField[i, j].texture = tile_bomb_activated;
+
+                            if (drawField[i, j].texture == tile_flag_bad)
+                                drawField[i, j].textToDraw = "";
 
                             eng.Add(drawField[i, j]);
                         }
@@ -182,6 +303,8 @@ namespace Game_engine
                 }
 
             }
+            #endregion
+            #region Right button
             else if (e.Button == MouseButtons.Right)
             {
                 if (playField[x, y] == 0)
@@ -221,6 +344,7 @@ namespace Game_engine
                     mineMarksLeft.Text = (int.Parse(mineMarksLeft.Text) + 1).ToString();
                 }
             }
+            #endregion
 
             if (int.Parse(mineMarksLeft.Text) == 0 && (from a in playField.OfType<int>() where a == 1 select a).Count() == 0)
             {
@@ -228,6 +352,7 @@ namespace Game_engine
                 end = true;
             }
         }
+        // TODO: Pridat ikonku vybuchle bomby + pri prohre zobrazit vsechny cisla
 
         private int NumberOfNearMines(int x, int y)
         {
