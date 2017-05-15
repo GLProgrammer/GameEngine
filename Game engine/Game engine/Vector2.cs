@@ -8,39 +8,25 @@ namespace Game_engine
 {
     class Vector2
     {
-        protected float x, y;
+        private float x, y;
 
-        protected Vector2() { }
+        public Vector2() { }
 
         public Vector2(float x, float y)
         {
             this.x = x;
             this.y = y;
         }
-        public float GetX()
-        {
-            return x;
-        }
-        public float GetY()
-        {
-            return y;
-        }
-        public virtual Vector2 GetZero2()
-        {
-            return new Vector2(0, 0);
-        }
-        public void SetX(float x)
-        {
-            this.x =x;
-        }
-        public void SetY(float y)
-        {
-            this.y = y;
-        }
+
+        public float GetX() { return x; }
+        public float GetY() { return y; }
+        public Vector2 GetZero2() { return new Vector2(0, 0); }
+
+        public void SetX(float x) { this.x = x; }
+        public void SetY(float y) { this.y = y; }
         public void SetVector2(float x, float y)
         {
-            this.x = x;
-            this.y = y;
+            this.x = x; this.y = y;
         }
     }
 }
